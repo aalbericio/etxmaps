@@ -46,39 +46,6 @@ console.log(circles.length);
 d3.xml("simple_marker.svg", "image/svg+xml", function(xml) {
   var importedNode = document.importNode(xml.documentElement, true);
 
-svg.selectAll("g")
-.data(circles)
-.enter()
-    .append("g")
-.each(function(d, i){
-
-    /*
-    var transform = d3.geo.transform({point: projectPoint}),
-            	path = d3.geo.path().projection(transform);
-
-      this.appendChild(importedNode.cloneNode(true))
-      .attr("d", path);
-		});   */
-});
-});
-
-
-function projectPoint(x, y) {
-   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-   this.stream.point(point.x, point.y);
-  }
-
-//map.on("viewreset", update);
-
-
-
-    //Import the plane
-
-   /* d3.xml("simple_marker.svg", "image/svg+xml", function(svgImg) {
-         map.getPanes().overlayPane.appendChild(svgImg.documentElement);
-
-    });*/
-
 
 		</script>
 	</body>
