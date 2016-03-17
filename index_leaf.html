@@ -6,9 +6,8 @@
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
-     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-
-       <script src="js/coords.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+    <script src="js/coords.js"></script>
 
 	<style>
 		body { margin:0; padding:0; }
@@ -21,32 +20,19 @@
 		<script>
 
 			var map = L.map('map', {
-				zoomControl: false
+				zoomControl: false,
+				attributionControl: false				
 			}).setView([41.4056929, 2.183169], 13);
 
 			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 				maxZoom: 19,
 				minZoom: 13,
 				id: 'mapbox.streets',
 				accessToken: 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ'
 			}).addTo(map);
-
-            var circles = generateNCoords(10);
-
-              var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-              g = svg.append("g");//.attr("class", "leaflet-zoom-hide");
-
-      /*        circles.forEach(function(d) {
-		d.LatLng = new L.LatLng(d[0],d[1])
-	});*/
-
-console.log(circles.length);
-
-d3.xml("simple_marker.svg", "image/svg+xml", function(xml) {
-  var importedNode = document.importNode(xml.documentElement, true);
-
-
+			
+			var myLayer = L.geoJson(features).addTo(map);
+			
 		</script>
 	</body>
 </html>
