@@ -23,10 +23,10 @@
     <script type="text/javascript">
       var map = new ol.Map({
 		target: 'map',
+		renderer: 'canvas',
 		controls: [
 		],
-		layers: [
-			new ol.layer.Tile({
+		layers: [new ol.layer.Tile({
 				source: new ol.source.XYZ({
 					url: 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ',
 					id: 'mapbox.streets'
