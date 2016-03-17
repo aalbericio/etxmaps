@@ -5,6 +5,7 @@
 	
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
 
 	<style>
 		body { margin:0; padding:0; }
@@ -27,6 +28,19 @@
 				id: 'mapbox.streets',
 				accessToken: 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ'
 			}).addTo(map);
+            
+            
+              var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+        g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    
+    //Import the plane
+
+    d3.xml("simple_marker.svg", "image/svg+xml", function(svgImg) {
+         map.getPanes().overlayPane.appendChild(svgImg.documentElement);
+       
+    });
+    
+    
 		</script>
 	</body>
 </html>
