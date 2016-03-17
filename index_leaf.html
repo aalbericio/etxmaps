@@ -1,0 +1,39 @@
+<html>
+	<head>
+	<meta charset=utf-8 />
+	<title>ETX MAPBOX</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	
+	 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	
+	<style>
+		body { margin:0; padding:0; }
+		#map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
+	
+	</head>
+	<body>
+		<div id='map'></div>
+		<script>
+		/*	L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
+
+			var map = L.mapbox.map('map', 'mapbox.streets', { 
+				maxZoom: 19,
+				minZoom: 13,
+				zoomControl: false }).setView([41.4056929, 2.183169], 13);
+*/
+
+
+var mymap = L.map('map').setView([51.505, -0.09], 13);
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ'
+}).addTo(mymap);
+
+		</script>
+	</body>
+</html>
