@@ -13,11 +13,14 @@ var featuresTimeout;
 onmessage = function (oEvent) {
 	switch(oEvent.data) {
 		case "generateFeatures":
-			startGeneratingFeatures();
+		if(!featuresTimeout) {
+				startGeneratingFeatures();
+			}
 			break;
 			
 		case "stopGeneratingFeatures":
 			clearInterval(featuresTimeout);
+			featuresTimeout = null;
 			break;
 	}
 };
