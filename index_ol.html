@@ -14,6 +14,15 @@
     <div id="map" class="map"></div>
 	
     <script type="text/javascript">
+		function addFeature() {
+			var newGeoJSONFeature = generateGeoJSONFeature();
+			var newFeature = new ol.format.GeoJSON().readFeature(newGeoJSONFeature, {
+				featureProjection: 'EPSG:3857'
+			});
+
+			vectorSource.addFeature(newFeature);
+		}
+	
 		var styles = {
 			'Point': [new ol.style.Style({
 				image: new ol.style.Circle({
@@ -64,5 +73,9 @@
 		});
 		
     </script>
+	
+	<div id="foregroundContent">
+		<button onclick="addFeature()">Add feature</button>
+	</div>
   </body>
 </html>
