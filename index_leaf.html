@@ -9,15 +9,18 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
     <script src="js/coords.js"></script>
 
-	<style>
-		body { margin:0; padding:0; }
-		#map { position:absolute; top:0; bottom:0; width:100%; }
-	</style>
+	<link rel="stylesheet" type="text/css" href="style/custom.css">
 
 	</head>
 	<body>
 		<div id='map'></div>
 		<script>
+			function addFeature() {
+				var newFeature = generateGeoJSONFeature();
+
+				L.geoJson(newFeature).addTo(map);
+			}
+	
 			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
 
 			var map = L.map('map', {
@@ -36,5 +39,9 @@
 			var myLayer = L.geoJson(features).addTo(map);
 			
 		</script>
+		
+		<div id="foregroundContent">
+			<button onclick="addFeature()">Add feature</button>
+		</div>
 	</body>
 </html>
