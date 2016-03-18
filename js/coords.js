@@ -1,9 +1,18 @@
-var lat_min = 41.34802785;
-var lat_max = 41.46320757;
-var lon_min = 2.10684613;
-var lon_max = 2.25857193;
+var lat_min = 41.35272;
+var lat_max = 41.45868;
+var lon_min = 2.05547;
+var lon_max = 2.31073;
+var center_lat = 41.4056929;
+var center_lon = 2.18316;
 
 var features = {
+	'type': 'FeatureCollection',
+	'crs': {
+          'type': 'name',
+          'properties': {
+            'name': 'EPSG:4326'
+          }
+        },
 	"features": [
 		{
 			"type": "Feature",
@@ -17,6 +26,13 @@ var features = {
 			"geometry": {
 				"type": "Point",
 				"coordinates": [2.193169, 41.4156929]
+			}
+		}, 
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [21.54967, 38.70250]
 			}
 		}
 	]

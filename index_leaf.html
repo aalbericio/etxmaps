@@ -18,11 +18,13 @@
 	<body>
 		<div id='map'></div>
 		<script>
+			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
 
 			var map = L.map('map', {
+				maxBounds: bounds,
 				zoomControl: false,
 				attributionControl: false				
-			}).setView([41.4056929, 2.183169], 13);
+			}).setView([center_lat, center_lon], 13);
 
 			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 				maxZoom: 19,

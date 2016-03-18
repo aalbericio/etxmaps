@@ -21,14 +21,17 @@
 	<body>
 		<div id='map'></div>
 		<script>
+			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
+			
 			L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
 
 			var map = L.mapbox.map('map', 'mapbox.streets', { 
+				maxBounds: bounds,
 				attributionControl: false,
 				maxZoom: 19,
 				minZoom: 13,
 				zoomControl: false 
-			}).setView([41.4056929, 2.183169], 13);
+			}).setView([center_lat, center_lon], 13);
 
 			var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
 		</script>
