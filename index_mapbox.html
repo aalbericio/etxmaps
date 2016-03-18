@@ -13,14 +13,27 @@
 	<script src="js/coords.js"></script>
 	
 	<style>
-		body { margin:0; padding:0; }
-		#map { position:absolute; top:0; bottom:0; width:100%; }
+		body { 
+			margin:0; 
+			padding:0; 
+			display: flex;
+			flex-direction: column; 
+			width: 100%;
+			height: 100%; 
+		}
+		#map { top:0; bottom:0; width:100%; }
 	</style>
 	
 	</head>
 	<body>
 		<div id='map'></div>
 		<script>
+			function addFeature() {
+				var newFeature = generateRandomFeature();
+				
+				vectorSource.addFeature(newFeature);	
+			}
+			
 			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
 			
 			L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
@@ -35,5 +48,7 @@
 
 			var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
 		</script>
+		
+		<div><input type="button" onclick="addFeature()">Add feature</input></div>
 	</body>
 </html>

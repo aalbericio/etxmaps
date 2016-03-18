@@ -27,15 +27,18 @@ var features = {
 				"type": "Point",
 				"coordinates": [2.193169, 41.4156929]
 			}
-		}, 
-		{
-			"type": "Feature",
-			"geometry": {
-				"type": "Point",
-				"coordinates": [21.54967, 38.70250]
-			}
 		}
 	]
+}
+
+function generateGeoJSONFeature() {
+	return {
+		"type": "Feature",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [generateLat(), generateLon()]
+		}
+	}
 }
 
 function generateRandomNumber(min, max) {
