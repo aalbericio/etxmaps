@@ -16,18 +16,19 @@
 
 </head>
 <body>
+
 	<div id='map'></div>
 	<script>
-	
+
 	function addFeature() {
 		var newFeature = generateGeoJSONFeature();
-
-		L.mapbox.featureLayer().setGeoJSON(newFeature).addTo(map);
+		//así obtenemos la referencia del marker que añade
+		var markerGroup = L.mapbox.featureLayer(newFeature).addTo(map);
 	}
 
 	var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
 
-	L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
+	L.mapbox.accessToken = LEAFLET_TOKEN;
 
 	var map = L.mapbox.map('map', 'mapbox.streets', {
 		maxBounds: bounds,
@@ -38,10 +39,15 @@
 	}).setView([center_lat, center_lon], 13);
 
 	var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
+
 	</script>
 
 	<div id="foregroundContent">
 		<button onclick="addFeature()">Add feature</button>
+		<button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
+		<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
+		<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button>
 	</div>
+
 </body>
 </html>

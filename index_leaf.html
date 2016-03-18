@@ -20,28 +20,31 @@
 
 				L.geoJson(newFeature).addTo(map);
 			}
-	
+
 			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
 
 			var map = L.map('map', {
 				maxBounds: bounds,
 				zoomControl: false,
-				attributionControl: false				
+				attributionControl: false
 			}).setView([center_lat, center_lon], 13);
 
 			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 				maxZoom: 19,
 				minZoom: 13,
 				id: 'mapbox.streets',
-				accessToken: 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ'
+				accessToken: LEAFLET_TOKEN
 			}).addTo(map);
-			
+
 			var myLayer = L.geoJson(features).addTo(map);
-			
+
 		</script>
-		
+
 		<div id="foregroundContent">
 			<button onclick="addFeature()">Add feature</button>
+			<button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
+			<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
+			<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button>
 		</div>
 	</body>
 </html>
