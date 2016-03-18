@@ -10,4 +10,5 @@ body {
 
 #foregroundContent {
 	position: absolute;
+	flex-direction: column;
 }

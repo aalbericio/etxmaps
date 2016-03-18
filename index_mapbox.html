@@ -10,7 +10,7 @@
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
-	<script src="js/coords.js"></script>
+	<script src="js/app.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="style/custom.css">
 
@@ -20,33 +20,39 @@
 	<div id='map'></div>
 	<script>
 
-	function addFeature() {
-		var newFeature = generateGeoJSONFeature();
-		//así obtenemos la referencia del marker que añade
-		var markerGroup = L.mapbox.featureLayer(newFeature).addTo(map);
+	function goHome() {
+		map.setView([center_lat, center_lon], initialZoom);
 	}
-
-	var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
+			
+	function addFeature(newFeature) {
+		L.mapbox.featureLayer(newFeature).addTo(map);
+	}
+	
+	function goHome() {
+		map.setView([center_lat, center_lon], initialZoom);
+	}
 
 	L.mapbox.accessToken = LEAFLET_TOKEN;
 
 	var map = L.mapbox.map('map', 'mapbox.streets', {
-		maxBounds: bounds,
 		attributionControl: false,
-		maxZoom: 19,
-		minZoom: 13,
+		maxZoom: maxZoom,
+		minZoom: minZoom,
 		zoomControl: false
-	}).setView([center_lat, center_lon], 13);
+	}).setView([center_lat, center_lon], initialZoom);
 
 	var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
 
 	</script>
 
 	<div id="foregroundContent">
-		<button onclick="addFeature()">Add feature</button>
+		<button onclick="goHome()">Fly home</button>
+		<button onclick="generateFeatures()">Generate features</button>
+		<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
+		<!--button onclick="addFeature()">Add feature</button>
 		<button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
 		<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
-		<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button>
+		<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button-->
 	</div>
 
 </body>

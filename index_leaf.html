@@ -7,7 +7,7 @@
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-    <script src="js/coords.js"></script>
+    <script src="js/app.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="style/custom.css">
 
@@ -15,23 +15,22 @@
 	<body>
 		<div id='map'></div>
 		<script>
-			function addFeature() {
-				var newFeature = generateGeoJSONFeature();
-
+			function goHome() {
+				map.setView([center_lat, center_lon], initialZoom);
+			}
+	
+			function addFeature(newFeature) {
 				L.geoJson(newFeature).addTo(map);
 			}
 
-			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
-
 			var map = L.map('map', {
-				maxBounds: bounds,
 				zoomControl: false,
 				attributionControl: false
-			}).setView([center_lat, center_lon], 13);
+			}).setView([center_lat, center_lon], initialZoom);
 
 			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-				maxZoom: 19,
-				minZoom: 13,
+				maxZoom: maxZoom,
+				minZoom: minZoom,
 				id: 'mapbox.streets',
 				accessToken: LEAFLET_TOKEN
 			}).addTo(map);
@@ -41,10 +40,11 @@
 		</script>
 
 		<div id="foregroundContent">
-			<button onclick="addFeature()">Add feature</button>
-			<button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
+			<button onclick="goHome()">Fly home</button>
+			<button onclick="generateFeatures()">Generate features</button>
+			<!--button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
 			<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
-			<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button>
+			<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button-->
 		</div>
 	</body>
 </html>
