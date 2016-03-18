@@ -1,54 +1,65 @@
 <!doctype html>
 <html>
-	<head>
+<head>
 	<meta charset=utf-8 />
 	<title>ETX MAPBOX</title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-	
+
 	<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 	<script src="js/coords.js"></script>
-	
+
 	<style>
-		body { 
-			margin:0; 
-			padding:0; 
-			display: flex;
-			flex-direction: column; 
-			width: 100%;
-			height: 100%; 
-		}
-		#map { top:0; bottom:0; width:100%; }
+	body {
+		margin:0;
+		padding:0;
+
+		width: 100%;
+		height: 100%;
+	}
+	#map {
+		position: fixed;
+		top: 0;
+		bottom: 60px;
+		width:100%;
+	}
+
+	.buttons{
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 40px;
+	}
 	</style>
-	
-	</head>
-	<body>
-		<div id='map'></div>
-		<script>
-			function addFeature() {
-				var newFeature = generateRandomFeature();
-				
-				vectorSource.addFeature(newFeature);	
-			}
-			
-			var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
-			
-			L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
 
-			var map = L.mapbox.map('map', 'mapbox.streets', { 
-				maxBounds: bounds,
-				attributionControl: false,
-				maxZoom: 19,
-				minZoom: 13,
-				zoomControl: false 
-			}).setView([center_lat, center_lon], 13);
+</head>
+<body>
+	<div id='map'></div>
+	<script>
+	function addFeature() {
+		var newFeature = generateRandomFeature();
 
-			var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
-		</script>
-		
-		<div><input type="button" onclick="addFeature()">Add feature</input></div>
-	</body>
+		vectorSource.addFeature(newFeature);
+	}
+
+	var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
+
+	L.mapbox.accessToken = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
+
+	var map = L.mapbox.map('map', 'mapbox.streets', {
+		maxBounds: bounds,
+		attributionControl: false,
+		maxZoom: 19,
+		minZoom: 13,
+		zoomControl: false
+	}).setView([center_lat, center_lon], 13);
+
+	var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
+	</script>
+
+	<div class="buttons"><button onclick="addFeature()">Add feature</button></div>
+</body>
 </html>
