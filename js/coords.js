@@ -36,7 +36,7 @@ function generateGeoJSONFeature() {
 		"type": "Feature",
 		"geometry": {
 			"type": "Point",
-			"coordinates": [generateLat(), generateLon()]
+			"coordinates": [generateLon(), generateLat()]
 		}
 	}
 }

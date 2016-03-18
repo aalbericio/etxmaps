@@ -20,19 +20,13 @@
 		width: 100%;
 		height: 100%;
 	}
-	#map {
-		position: fixed;
-		top: 0;
-		bottom: 60px;
-		width:100%;
+	
+	#map { position:absolute; left: 0; top:0; bottom:0; width:100%; }
+
+	#foregroundContent {
+		position: absolute;
 	}
 
-	.buttons{
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		height: 40px;
-	}
 	</style>
 
 </head>
@@ -40,9 +34,9 @@
 	<div id='map'></div>
 	<script>
 	function addFeature() {
-		var newFeature = generateRandomFeature();
+		var newFeature = generateGeoJSONFeature();
 
-		vectorSource.addFeature(newFeature);
+		L.mapbox.featureLayer().setGeoJSON(newFeature).addTo(map);
 	}
 
 	var bounds = L.latLngBounds(L.latLng(lat_min, lon_min), L.latLng(lat_max, lon_max));
@@ -60,6 +54,8 @@
 	var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
 	</script>
 
-	<div class="buttons"><button onclick="addFeature()">Add feature</button></div>
+	<div id="foregroundContent">
+		<button onclick="addFeature()">Add feature</button>
+	</div>
 </body>
 </html>

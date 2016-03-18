@@ -1,18 +1,25 @@
 {
-"features": [
-	{
-		"type": "Feature",
-		"geometry": {
-			"type": "Point",
-			"coordinates": [0, 0]
+	"type": "FeatureCollection",
+	"crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:4326"
+          }
+        },
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [2.183169, 41.4056929]
+			}
+		}, 
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [2.193169, 41.4156929]
+			}
 		}
-	}, 
-	{
-		"type": "Feature",
-		"geometry": {
-			"type": "Point",
-			"coordinates": [0, 0]
-		}
-	}
-]
+	]
 }
