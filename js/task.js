@@ -13,11 +13,11 @@ var featuresTimeout;
 onmessage = function (oEvent) {
 	switch(oEvent.data) {
 		case "generateFeatures":
-		if(!featuresTimeout) {
+			if(!featuresTimeout) {
 				startGeneratingFeatures();
 			}
 			break;
-			
+
 		case "stopGeneratingFeatures":
 			clearInterval(featuresTimeout);
 			featuresTimeout = null;
@@ -49,7 +49,7 @@ function generateGeoJSONFeature() {
 }
 
 function generateRandomNumber(min, max) {
-    return Math.random() * (max - min) + min;
+	return Math.random() * (max - min) + min;
 }
 
 function generateLat(){
