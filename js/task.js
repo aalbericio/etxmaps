@@ -34,7 +34,7 @@ function sendNewFeature() {
 	var markerId = Math.round(Math.random()*(NUMBER_OF_FEATURES-1));
 	var foundMarker = markers[markerId]; 
 	
-	if(foundMarker == undefined) {
+	if(foundMarker === undefined) {
 		var newMarker = generateGeoJSONFeature(markerId);
 		
 		markers[markerId] = newMarker;
