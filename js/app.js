@@ -7,10 +7,12 @@ var lon_max = 2.31073;
 var center_lat = 41.4056929;
 var center_lon = 2.18316;
 var initialZoom = 13;
-var minZoom = 6;
+var minZoom = 10;
 var maxZoom = 19;
 
 var NUM_OF_MARKERS = 100;
+
+var markers = [];
 
 var appWorker = new Worker("js/task.js");
 
@@ -18,6 +20,10 @@ appWorker.onmessage = function (oEvent) {
 	switch(oEvent.data.type) {
 		case "generatedFeature":
 			addFeature(oEvent.data.feature);
+			break;
+		
+		case "moveFeature":
+			moveFeature(oEvent.data.feature);
 			break;
 	}
 };
@@ -31,25 +37,27 @@ function generateFeatures() {
 }
 
 function getGifIcon(){
-	return '<img width="80" height="80" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif?seed='+
-            String(Math.random())+
-            '"/>';
+  return '<img width="80" height="80" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif?seed='+String(Math.random())+'"/>';
 }
 
 var features = {
 	'type': 'FeatureCollection',
 	'crs': {
-		'type': 'name',
-		'properties': {
-			'name': 'EPSG:4326'
-		}
-	},
+          'type': 'name',
+          'properties': {
+            'name': 'EPSG:4326'
+          }
+        },
 	"features": [
 		{
 			"type": "Feature",
 			"geometry": {
 				"type": "Point",
 				"coordinates": [2.183169, 41.4056929]
+			},
+			"properties": {
+				"marker-symbol": "star",
+				"marker-color": "#007FFF",
 			}
 		},
 		{
@@ -57,28 +65,32 @@ var features = {
 			"geometry": {
 				"type": "Point",
 				"coordinates": [2.193169, 41.4156929]
+			},
+			"properties": {
+				"marker-symbol": "star",
+				"marker-color": "#007FFF",
 			}
 		}
 	]
 }
 
 function generateMarkers(markersNum, generator){
-	for (var i = 0; i < markersNum; i++)
-		generator();
+  for (var i = 0; i < markersNum; i++)
+    generator();
 }
 
 function leafLeftAndMapBoxSVGMarker(){
-	/// Define an icon called cssIcon
-	var marker = L.divIcon({
-		// Specify a class name we can refer to in CSS.
-		className: 'css-icon',
-		html: getGifIcon()/*,
-		 // Set marker width and height
-		 iconSize: [60, 60]*/
-	});
+  /// Define an icon called cssIcon
+  var marker = L.divIcon({
+    // Specify a class name we can refer to in CSS.
+    className: 'css-icon',
+    html: getGifIcon()/*,
+    // Set marker width and height
+    iconSize: [60, 60]*/
+  });
 
-	// Create three markers and set their icons to marker
-	L.marker([generateLat(), generateLon()], {icon: marker}).addTo(map);
+  // Create three markers and set their icons to marker
+  L.marker([generateLat(), generateLon()], {icon: marker}).addTo(map);
 }
 
 function generateGeoJSONFeature() {
@@ -92,7 +104,7 @@ function generateGeoJSONFeature() {
 }
 
 function generateRandomNumber(min, max) {
-	return Math.random() * (max - min) + min;
+    return Math.random() * (max - min) + min;
 }
 
 function generateLat(){
@@ -104,19 +116,10 @@ function generateLon(){
 }
 
 function generateNCoords(num){
-	var coords = [];
-	while(coords.length < num){
-		coords.push([generateLat(), generateLon()]);
-	}
+    var coords = [];
+    while(coords.length < num){
+        coords.push([generateLat(), generateLon()]);
+    }
 
-	return coords;
+    return coords;
 }
-
-function countObjectProperties(obj){
-	var count = 0;
-	for (var prop in obj)
-		count++;
-
-	return count;
-}
-

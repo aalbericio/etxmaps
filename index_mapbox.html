@@ -25,10 +25,39 @@
 	}
 
 	function addFeature(newFeature) {
-		L.mapbox.featureLayer(newFeature).addTo(map);
+		//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
+		var newMarker = L.marker([newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]]);
+		
+		markers[newFeature.id] = newMarker;
+		//newMarker.addTo(map);
+		//newMarker.addTo(myLayer);
+		newMarker.addTo(myCluster);
 	}
-
+	
+	function moveFeature(newFeature) {
+		var foundMarker = markers[newFeature.id];
+		
+		if(foundMarker !== undefined) {
+			var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+			
+			foundMarker.setLatLng(newCoordinates);
+			//rebuildClusters();
+		}
+	}
+	
+	function rebuildClusters() {
+		myCluster.clearLayers();
+		
+		for (var key in markers) {
+        	markers[key].addTo(myCluster);
+		}
+	}
+	
 	function goHome() {
+		stopGeneratingFeatures();
+		//myLayer.clearLayers();
+		myCluster.clearLayers();
+		markers = [];
 		map.setView([center_lat, center_lon], initialZoom);
 	}
 
@@ -38,15 +67,24 @@
 		attributionControl: false,
 		maxZoom: maxZoom,
 		minZoom: minZoom,
-		zoomControl: false
+		zoomControl: false,
+		tileLayer: {
+			format: 'jpg70'
+		}
 	}).setView([center_lat, center_lon], initialZoom);
-
-	var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
+	
+	// Load initial GeoJSON features
+	//var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
+	
+	// LayerGroup to hold our markers
+	//var myLayer = L.layerGroup([]).addTo(map);
+	
+	var myCluster = new L.MarkerClusterGroup().addTo(map);
 
 	</script>
 
 	<div id="foregroundContent">
-		<button onclick="goHome()">Fly home</button>
+		<button onclick="goHome()">Reset</button>
 		<button onclick="generateFeatures()">Generate features</button>
 		<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
 		<!--button onclick="addFeature()">Add feature</button>
