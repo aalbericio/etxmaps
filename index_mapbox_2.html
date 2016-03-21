@@ -155,20 +155,17 @@
 		console.log("layer: " + layer._leaflet_id);
 	});
 
-
-	var t = 0;
-
 	setInterval(function (){
 				featureGroup.eachLayer(function (marker){
 					updatePosition(marker);
 				});
 			}
-			, 50);
+			, 16);
 
 
 function updatePosition(marker) {
 	function getRandomCoord(coord) {
-		var inc = Math.random() * 0.001;
+		var inc = Math.random() * 0.0005;
 		return (Math.random() < 0.5) ? coord - inc : coord + inc;
 	}
 

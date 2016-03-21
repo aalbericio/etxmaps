@@ -7,6 +7,10 @@
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+	<script src="js/pool.js"></script>
     <script src="js/app.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="style/custom.css">
@@ -16,11 +20,46 @@
 		<div id='map'></div>
 		<script>
 			function goHome() {
+				stopGeneratingFeatures();
+
+				if (USE_CLUSTERING)
+					myCluster.clearLayers();
+				else
+					myLayer.clearLayers();
+
+				markers.clear();
 				map.setView([center_lat, center_lon], initialZoom);
 			}
 	
 			function addFeature(newFeature) {
-				L.geoJson(newFeature).addTo(map);
+				//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
+				var newMarker = L.marker([newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]]);
+
+				markers.setItem(newFeature.id, newMarker);
+
+				if (USE_CLUSTERING)
+					newMarker.addTo(myCluster);
+				else
+					newMarker.addTo(map);
+			}
+
+			function moveFeature(newFeature) {
+				if(markers.containsItem(newFeature.id)) {
+					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+
+					markers.getItem(newFeature.id).setLatLng(newCoordinates);
+					//rebuildClusters();
+				}
+			}
+
+			function rebuildClusters() {
+				if (USE_CLUSTERING) {
+					myCluster.clearLayers();
+
+					for (var key in markers) {
+						markers.getItem(key).addTo(myCluster);
+					}
+				}
 			}
 
 			var map = L.map('map', {
@@ -35,7 +74,10 @@
 				accessToken: LEAFLET_TOKEN
 			}).addTo(map);
 
-			var myLayer = L.geoJson(features).addTo(map);
+		//	var myLayer = L.geoJson(features).addTo(map);
+
+			if (USE_CLUSTERING)
+				var myCluster = new L.MarkerClusterGroup().addTo(map);
 
 		</script>
 

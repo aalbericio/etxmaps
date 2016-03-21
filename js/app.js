@@ -1,3 +1,5 @@
+//CONSTANTS
+
 var LEAFLET_TOKEN = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
 
 var lat_min = 41.35272;
@@ -12,7 +14,13 @@ var maxZoom = 19;
 
 var NUM_OF_MARKERS = 100;
 
-var markers = [];
+var USE_CLUSTERING = false;
+
+
+///CODE
+
+
+var markers = new Pool();
 
 var appWorker = new Worker("js/task.js");
 

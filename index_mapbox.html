@@ -10,6 +10,7 @@
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
 	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+	<script src="js/pool.js"></script>
 	<script src="js/app.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="style/custom.css">
@@ -19,8 +20,15 @@
 
 	<div id='map'></div>
 	<script>
-
 	function goHome() {
+		stopGeneratingFeatures();
+
+		if (USE_CLUSTERING)
+			myCluster.clearLayers();
+		else
+			myLayer.clearLayers();
+
+		markers.clear();
 		map.setView([center_lat, center_lon], initialZoom);
 	}
 
@@ -28,37 +36,32 @@
 		//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
 		var newMarker = L.marker([newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]]);
 		
-		markers[newFeature.id] = newMarker;
-		//newMarker.addTo(map);
-		//newMarker.addTo(myLayer);
-		newMarker.addTo(myCluster);
+		markers.setItem(newFeature.id, newMarker);
+
+		if (USE_CLUSTERING)
+			newMarker.addTo(myCluster);
+		else
+			newMarker.addTo(map);
 	}
 	
 	function moveFeature(newFeature) {
-		var foundMarker = markers[newFeature.id];
-		
-		if(foundMarker !== undefined) {
+		if(markers.containsItem(newFeature.id)) {
 			var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
-			
-			foundMarker.setLatLng(newCoordinates);
-			//rebuildClusters();
+
+			markers.getItem(newFeature.id).setLatLng(newCoordinates);
+
+		//		rebuildClusters();
 		}
 	}
 	
 	function rebuildClusters() {
-		myCluster.clearLayers();
-		
-		for (var key in markers) {
-        	markers[key].addTo(myCluster);
+		if (USE_CLUSTERING) {
+			myCluster.clearLayers();
+
+			for (var key in markers) {
+				markers.getItem(key).addTo(myCluster);
+			}
 		}
-	}
-	
-	function goHome() {
-		stopGeneratingFeatures();
-		//myLayer.clearLayers();
-		myCluster.clearLayers();
-		markers = [];
-		map.setView([center_lat, center_lon], initialZoom);
 	}
 
 	L.mapbox.accessToken = LEAFLET_TOKEN;
@@ -78,8 +81,9 @@
 	
 	// LayerGroup to hold our markers
 	//var myLayer = L.layerGroup([]).addTo(map);
-	
-	var myCluster = new L.MarkerClusterGroup().addTo(map);
+
+	if (USE_CLUSTERING)
+		var myCluster = new L.MarkerClusterGroup().addTo(map);
 
 	</script>
 
