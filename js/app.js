@@ -12,9 +12,7 @@ var initialZoom = 13;
 var minZoom = 10;
 var maxZoom = 19;
 
-var NUM_OF_MARKERS = 100;
-
-var USE_CLUSTERING = false;
+var USE_CLUSTERING = true;
 
 
 ///CODE

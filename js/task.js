@@ -2,7 +2,7 @@ var lat_min = 41.35272;
 var lat_max = 41.45868;
 var lon_min = 2.05547;
 var lon_max = 2.31073;
-var NUMBER_OF_FEATURES = 10;
+var NUMBER_OF_FEATURES = 20;
 var REFRESH_RATE = 100;
 var featuresTimeout;
 

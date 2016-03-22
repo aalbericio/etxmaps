@@ -45,25 +45,17 @@
 	}
 	
 	function moveFeature(newFeature) {
-		if(markers.containsItem(newFeature.id)) {
+		var foundMarker = markers.getItem(newFeature.id);
+
+		if(foundMarker !== undefined) {
 			var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
-			markers.getItem(newFeature.id).setLatLng(newCoordinates);
-
-		//		rebuildClusters();
+			myCluster.removeLayer(foundMarker);
+			foundMarker.setLatLng(newCoordinates);
+			foundMarker.addTo(myCluster);
 		}
 	}
 	
-	function rebuildClusters() {
-		if (USE_CLUSTERING) {
-			myCluster.clearLayers();
-
-			for (var key in markers) {
-				markers.getItem(key).addTo(myCluster);
-			}
-		}
-	}
-
 	L.mapbox.accessToken = LEAFLET_TOKEN;
 
 	var map = L.mapbox.map('map', 'mapbox.streets', {
@@ -82,8 +74,9 @@
 	// LayerGroup to hold our markers
 	//var myLayer = L.layerGroup([]).addTo(map);
 
-	if (USE_CLUSTERING)
+	if (USE_CLUSTERING) {
 		var myCluster = new L.MarkerClusterGroup().addTo(map);
+	}
 
 	</script>
 

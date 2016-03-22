@@ -3,13 +3,11 @@
 	<meta charset=utf-8 />
 	<title>ETX LEAFLET</title>
 
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.js"></script>
+	<link rel="stylesheet" href="js/MarkerCluster.css" />
+	<link rel="stylesheet" href="js/MarkerCluster.Default.css" />
+	<script src="js/leaflet.markercluster.js"></script>
 	<script src="js/pool.js"></script>
     <script src="js/app.js"></script>
 
@@ -38,27 +36,21 @@
 				markers.setItem(newFeature.id, newMarker);
 
 				if (USE_CLUSTERING)
-					newMarker.addTo(myCluster);
+					//newMarker.addTo(myCluster);
+					myCluster.addLayer(newMarker);
 				else
 					newMarker.addTo(map);
 			}
 
 			function moveFeature(newFeature) {
-				if(markers.containsItem(newFeature.id)) {
+				var foundMarker = markers.getItem(newFeature.id);
+
+				if(foundMarker !== undefined) {
 					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
-					markers.getItem(newFeature.id).setLatLng(newCoordinates);
-					//rebuildClusters();
-				}
-			}
-
-			function rebuildClusters() {
-				if (USE_CLUSTERING) {
-					myCluster.clearLayers();
-
-					for (var key in markers) {
-						markers.getItem(key).addTo(myCluster);
-					}
+					myCluster.removeLayer(foundMarker);
+					foundMarker.setLatLng(newCoordinates);
+					foundMarker.addTo(myCluster);
 				}
 			}
 
@@ -76,8 +68,11 @@
 
 		//	var myLayer = L.geoJson(features).addTo(map);
 
-			if (USE_CLUSTERING)
-				var myCluster = new L.MarkerClusterGroup().addTo(map);
+			if (USE_CLUSTERING) {
+				var myCluster = new L.MarkerClusterGroup({
+					animate: false
+				}).addTo(map);
+			}
 
 		</script>
 
