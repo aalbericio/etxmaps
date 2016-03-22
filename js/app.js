@@ -1,6 +1,6 @@
 //CONSTANTS
 
-var LEAFLET_TOKEN = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
+var MAPBOX_TOKEN = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
 
 var lat_min = 41.35272;
 var lat_max = 41.45868;
