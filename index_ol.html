@@ -90,6 +90,14 @@
 				}
 			});
 
+			var normalStyle = new ol.style.Style({
+				stroke: new ol.style.Stroke({color: '#007FFF', width: 1})
+			});
+
+			function vtStyle(feature) {
+				return normalStyle;
+			}
+
 			var vectorLayer = new ol.layer.Vector({
 				source: vectorSource,
 				style: styleFunction
@@ -102,6 +110,16 @@
 				})
 			});
 
+			var vtLayer = new ol.layer.VectorTile({
+				style: vtStyle,
+				source: new ol.source.VectorTile({
+					tilePixelRatio: 1, // oversampling when > 1
+					tileGrid: ol.tilegrid.createXYZ({maxZoom: 19}),
+					format: new ol.format.MVT(),
+					url: 'http://85.87.53.115/geoserver/gwc/service/tms/1.0.0/etx:oip_link@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
+				})
+			});
+
 			var map = new ol.Map({
 				target: 'map',
 				renderer: 'canvas',
@@ -109,6 +127,7 @@
 				],
 				layers: [
 					rasterLayer,
+					vtLayer,
 					clusters
 				],
 				view: new ol.View({
