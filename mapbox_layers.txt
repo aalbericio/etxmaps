@@ -1,0 +1,72 @@
+MAPBOX LAYERS
+=============
+
+
++ Layers can be: 
+
+	- Images
+	- Lines
+	- Markers
+
++ Layers have a z-index and can you can build combinations or mashups
+
++ Mapbox inherits Leaflet's layers system and add two new types:
+
+	-
+
+	-
+
+
++ Layer classes:
+
+	+ LayerGroup: 
+		- extremely simple layer
+		
+		- contains logic to organize and sort a group of layers (markers, paths, etc)
+
+	+ FeatureGroup extends LayerGroup:
+
+		- Adds MouseEvents
+
++ A Map can contain a group of Layers and a Layer can contain a group of other layers:
+
+	- EG: A GeoJSON layer can contain:
+
+		1) Polygon layer 
+		2) Marker layer
+		3) Path layer
+
++ Common functions:
+
+	- addTo(map or layer): adds a layer to a map or to a layer
+
+	- eachLayer(function): runs a function over each layer in a group
+
++ TileLayer's individual tiles are not layers themselves
+
++ L.geoJSON extends FeatureGroup and creates layers for each point. You can loop through this group to process every individual marker (layer)
+
++ Mapbox L.mapbox.featureLayer extends L.geoJSON and can:
+
+	- Load a geoJSON file via AJAX
+	- Filter their contents with setFilter
+	- Style GeoJSON with simpleStyle-spec
+
+	EG:
+
+		+ L.mapbox.featureLayer("mapbox.layer.id").addTo(map)
+		+ var markers = markers.loadURL("mymarkers.geojson")
+
+
++ You can remove a layer by calling:
+
+	- map.removeLayer(layer)
+
++ L.mapbox.gridLayer is an INVISIBLE layer??
+
+	- TODO: Do an example with this specification UTFGrid
+
+	
+
+
+
