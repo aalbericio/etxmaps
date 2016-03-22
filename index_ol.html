@@ -110,7 +110,7 @@
 				})
 			});
 
-			var vtLayer = new ol.layer.VectorTile({
+			var vectorTilesLayer = new ol.layer.VectorTile({
 				style: vtStyle,
 				source: new ol.source.VectorTile({
 					tilePixelRatio: 1, // oversampling when > 1
@@ -127,7 +127,7 @@
 				],
 				layers: [
 					rasterLayer,
-					vtLayer,
+					vectorTilesLayer,
 					clusters
 				],
 				view: new ol.View({
