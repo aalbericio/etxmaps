@@ -24,8 +24,6 @@
 			}
 
 			function addFeature(newFeature) {
-				//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
-				//var newMarker = L.marker([newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]]);
 				var newMarker = new PruneCluster.Marker(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
 				markers.setItem(newFeature.id, newMarker);
