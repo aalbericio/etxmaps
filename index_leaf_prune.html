@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>PruneCluster - Realworld 50k</title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.js"></script>
+
+		<script src="js/PruneCluster.js"></script>
+
+		<link rel="stylesheet" href="style/examples.css"/>
+		<script src="js/pool.js"></script>
+		<script src="js/app.js"></script>
+		<link rel="stylesheet" href="style/custom.css"/>
+	</head>
+	<body>
+		<div id='map'></div>
+		<script>
+			function goHome() {
+				stopGeneratingFeatures();
+				myCluster.RemoveMarkers();
+				markers.clear();
+				map.setView([center_lat, center_lon], initialZoom);
+			}
+
+			function addFeature(newFeature) {
+				//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
+				//var newMarker = L.marker([newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]]);
+				var newMarker = new PruneCluster.Marker(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+
+				markers.setItem(newFeature.id, newMarker);
+				myCluster.RegisterMarker(newMarker);
+				myCluster.ProcessView();
+			}
+
+			function moveFeature(newFeature) {
+				var foundMarker = markers.getItem(newFeature.id);
+
+				if(foundMarker !== undefined) {
+					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+
+					// No need to remove and add the layer again (v1.0.0 only)
+					foundMarker.Move(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+					myCluster.ProcessView();
+				}
+			}
+
+			var map = L.map('map', {
+				zoomControl: false,
+				attributionControl: false
+			}).setView([center_lat, center_lon], initialZoom);
+
+			var baseMapLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={accessToken}', {
+				maxZoom: maxZoom,
+				minZoom: minZoom,
+				id: 'mapbox.streets',
+				accessToken: MAPBOX_TOKEN
+			}).addTo(map);
+
+			/*var vectorTilesLayer = new L.TileLayer.MVTSource({
+				url: 'http://85.87.53.115/geoserver/gwc/service/tms/1.0.0/etx:oip_link@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf',
+				tms: true,
+				style: simpleStyle,
+				debug: false
+			}).addTo(map);*/
+
+			//var myLayer = L.geoJson(features).addTo(map);
+
+			var myCluster = new PruneClusterForLeaflet();
+
+			map.addLayer(myCluster);
+		</script>
+
+		<div id="foregroundContent">
+			<button onclick="goHome()">Fly home</button>
+			<button onclick="generateFeatures()">Generate features</button>
+			<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
+		</div>
+	</body>
+</html>

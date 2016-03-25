@@ -49,24 +49,14 @@
 					newMarker.addTo(map);
 			}
 
-			function simpleStyle(feature) {
-				return style_simple;
-			}
-
-			var style_simple = {
-				color: '#007FFF',
-				size: 1
-			};
-
 			function moveFeature(newFeature) {
 				var foundMarker = markers.getItem(newFeature.id);
 
 				if(foundMarker !== undefined) {
 					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
-					myCluster.removeLayer(foundMarker);
+					// No need to remove and add the layer again (v1.0.0 only)
 					foundMarker.setLatLng(newCoordinates);
-					foundMarker.addTo(myCluster);
 				}
 			}
 
