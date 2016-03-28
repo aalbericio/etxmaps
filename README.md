@@ -36,7 +36,6 @@ ROADMAP
     - Marker filtering
     - Marker clustering
     - Marker update / repainting
-    -
 
 + Define marker categories, frontiers, etc:
 	- POIs
