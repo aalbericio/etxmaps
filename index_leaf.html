@@ -24,6 +24,23 @@
 	<body>
 		<div id='map'></div>
 		<script>
+			function initFeatures(size) {
+				for(var i=0; i < size; i++) {
+					var newFeature = {
+						"id": i,
+						"type": "Feature",
+						"geometry": {
+							"type": "Point",
+							"coordinates": [generateLon(), generateLat()]
+						}
+					};
+
+					addFeature(newFeature);
+				}
+
+				myCluster.addTo(map);
+			}
+
 			function goHome() {
 				stopGeneratingFeatures();
 
@@ -35,6 +52,16 @@
 				markers.clear();
 				map.setView([center_lat, center_lon], initialZoom);
 			}
+
+			function addOrMoveFeature(newFeature) {
+				var foundMarker = markers.getItem(newFeature.id);
+
+				if(foundMarker !== undefined) {
+					moveFeature(foundMarker, newFeature);
+				} else {
+					addFeature(newFeature);
+				}
+			}
 	
 			function addFeature(newFeature) {
 				//var newMarker = L.mapbox.featureLayer(newFeature).addTo(myLayer);
@@ -42,22 +69,18 @@
 
 				markers.setItem(newFeature.id, newMarker);
 
-				if (USE_CLUSTERING)
-					//newMarker.addTo(myCluster);
-					myCluster.addLayer(newMarker);
-				else
+				if (USE_CLUSTERING) {
+					newMarker.addTo(myCluster);
+				} else {
 					newMarker.addTo(map);
+				}
 			}
 
-			function moveFeature(newFeature) {
-				var foundMarker = markers.getItem(newFeature.id);
+			function moveFeature(foundMarker, newFeature) {
+				var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
-				if(foundMarker !== undefined) {
-					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
-
-					// No need to remove and add the layer again (v1.0.0 only)
-					foundMarker.setLatLng(newCoordinates);
-				}
+				// No need to remove and add the layer again (v1.0.0 only)
+				foundMarker.setLatLng(newCoordinates);
 			}
 
 			var map = L.map('map', {
@@ -81,11 +104,14 @@
 
 			//var myLayer = L.geoJson(features).addTo(map);
 
-			if (USE_CLUSTERING) {
+			if(USE_CLUSTERING) {
 				var myCluster = new L.MarkerClusterGroup({
 					animate: false
-				}).addTo(map);
+				});
+			} else {
+				var myLayer = L.geoJson(features).addTo(map);
 			}
+
 
 		</script>
 
@@ -93,9 +119,6 @@
 			<button onclick="goHome()">Fly home</button>
 			<button onclick="generateFeatures()">Generate features</button>
 			<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
-			<!--button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
-			<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
-			<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button-->
 		</div>
 	</body>
 </html>

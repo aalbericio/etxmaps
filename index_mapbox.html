@@ -24,13 +24,41 @@
 	function goHome() {
 		stopGeneratingFeatures();
 
-		if (USE_CLUSTERING)
+		if (USE_CLUSTERING) {
 			myCluster.clearLayers();
-		else
+		} else {
 			myLayer.clearLayers();
+		}
 
 		markers.clear();
 		map.setView([center_lat, center_lon], initialZoom);
+	}
+
+	function initFeatures(size) {
+		for(var i=0; i < size; i++) {
+			var newFeature = {
+				"id": i,
+				"type": "Feature",
+				"geometry": {
+					"type": "Point",
+					"coordinates": [generateLon(), generateLat()]
+				}
+			};
+
+			addFeature(newFeature);
+		}
+
+		myCluster.addTo(map);
+	}
+
+	function addOrMoveFeature(newFeature) {
+		var foundMarker = markers.getItem(newFeature.id);
+
+		if(foundMarker !== undefined) {
+			moveFeature(foundMarker, newFeature);
+		} else {
+			addFeature(newFeature);
+		}
 	}
 
 	function addFeature(newFeature) {
@@ -39,22 +67,19 @@
 		
 		markers.setItem(newFeature.id, newMarker);
 
-		if (USE_CLUSTERING)
+		if (USE_CLUSTERING) {
 			newMarker.addTo(myCluster);
-		else
+		} else {
 			newMarker.addTo(map);
+		}
 	}
 	
-	function moveFeature(newFeature) {
-		var foundMarker = markers.getItem(newFeature.id);
+	function moveFeature(foundMarker, newFeature) {
+		var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
 
-		if(foundMarker !== undefined) {
-			var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
-
-			myCluster.removeLayer(foundMarker);
-			foundMarker.setLatLng(newCoordinates);
-			foundMarker.addTo(myCluster);
-		}
+		myCluster.removeLayer(foundMarker);
+		foundMarker.setLatLng(newCoordinates);
+		foundMarker.addTo(myCluster);
 	}
 	
 	L.mapbox.accessToken = MAPBOX_TOKEN;
@@ -69,12 +94,12 @@
 		}
 	}).setView([center_lat, center_lon], initialZoom);
 
-	var vectorTilesLayer = new L.TileLayer.MVTSource({
+	/*var vectorTilesLayer = new L.TileLayer.MVTSource({
 		url: 'http://85.87.53.115/geoserver/gwc/service/tms/1.0.0/etx:oip_link@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf',
 		tms: true,
 		style: simpleStyle,
 		debug: false
-	}).addTo(map);
+	}).addTo(map);*/
 
 	function simpleStyle(feature) {
 		return style_simple;
@@ -85,15 +110,13 @@
 		size: 1
 	};
 
-	
 	// Load initial GeoJSON features
 	//var myLayer = L.mapbox.featureLayer().setGeoJSON(features).addTo(map);
 	
-	// LayerGroup to hold our markers
-	//var myLayer = L.layerGroup([]).addTo(map);
-
 	if (USE_CLUSTERING) {
 		var myCluster = new L.MarkerClusterGroup().addTo(map);
+	} else {
+		var myLayer = L.layerGroup([]);
 	}
 
 	</script>
@@ -102,10 +125,6 @@
 		<button onclick="goHome()">Reset</button>
 		<button onclick="generateFeatures()">Generate features</button>
 		<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
-		<!--button onclick="addFeature()">Add feature</button>
-		<button onclick="generateMarkers(NUM_OF_MARKERS,addFeature)">Add N features</button>
-		<button onclick="leafLeftAndMapBoxSVGMarker()">Add SVG Marker</button>
-		<button onclick="generateMarkers(NUM_OF_MARKERS,leafLeftAndMapBoxSVGMarker)">Add N SVG markers</button-->
 	</div>
 
 </body>

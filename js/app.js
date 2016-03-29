@@ -1,6 +1,7 @@
 //CONSTANTS
 
 var MAPBOX_TOKEN = 'pk.eyJ1IjoiYWFsYmVyaWNpbyIsImEiOiJjaWtvNXNnZHIwMDh6dnBtNng0aWc1Z2tkIn0.ud0lxs910DHjIIvhKh0nIQ';
+var NUMBER_OF_FEATURES = 30000;
 
 var lat_min = 41.35272;
 var lat_max = 41.45868;
@@ -14,32 +15,34 @@ var maxZoom = 19;
 
 var USE_CLUSTERING = true;
 
-
-///CODE
-
-
 var markers = new Pool();
 
 var appWorker = new Worker("js/task.js");
 
-appWorker.onmessage = function (oEvent) {
-	switch(oEvent.data.type) {
-		case "generatedFeature":
-			addFeature(oEvent.data.feature);
+appWorker.onmessage = function (workerEvent) {
+	switch(workerEvent.data.type) {
+		case "addOrMoveFeature":
+			addOrMoveFeature(workerEvent.data.feature);
 			break;
 		
-		case "moveFeature":
-			moveFeature(oEvent.data.feature);
+		case "addFeatures":
+			initFeatures(NUMBER_OF_FEATURES);
 			break;
 	}
 };
 
 function stopGeneratingFeatures() {
-	appWorker.postMessage("stopGeneratingFeatures");
+	appWorker.postMessage({
+		type: "stopGeneratingFeatures"
+	});
 }
 
-function generateFeatures() {
-	appWorker.postMessage("generateFeatures");
+function generateFeatures()
+{
+	appWorker.postMessage({
+		type: "generateFeatures",
+		size: NUMBER_OF_FEATURES
+	});
 }
 
 function getGifIcon(){

@@ -16,6 +16,23 @@
 	<body>
 		<div id='map'></div>
 		<script>
+			function initFeatures(size) {
+				for(var i=0; i < size; i++) {
+					var newFeature = {
+						"id": i,
+						"type": "Feature",
+						"geometry": {
+							"type": "Point",
+							"coordinates": [generateLon(), generateLat()]
+						}
+					};
+
+					addFeature(newFeature);
+				}
+
+				myCluster.ProcessView();
+			}
+
 			function goHome() {
 				stopGeneratingFeatures();
 				myCluster.RemoveMarkers();
@@ -23,24 +40,71 @@
 				map.setView([center_lat, center_lon], initialZoom);
 			}
 
-			function addFeature(newFeature) {
-				var newMarker = new PruneCluster.Marker(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+			var airportSvgIcon = L.icon({
+				iconUrl: 'assets/airport-24.svg',
+				iconSize: [24, 24],
+				iconAnchor: [24, 24],
+				popupAnchor: [-12, -28]
+			});
 
-				markers.setItem(newFeature.id, newMarker);
-				myCluster.RegisterMarker(newMarker);
-				myCluster.ProcessView();
-			}
+			var customIcon = new L.Icon.Default({
+				shadowSize: [0,0]
+			});
 
-			function moveFeature(newFeature) {
+			var airportIcon = L.icon({
+				iconUrl: 'assets/airport-24.png',
+				iconRetinaUrl: 'assets/airport-24.png',
+				iconSize: [24, 24],
+				iconAnchor: [24, 24],
+				popupAnchor: [-12, -28]
+			});
+
+			function addOrMoveFeature(newFeature) {
 				var foundMarker = markers.getItem(newFeature.id);
 
 				if(foundMarker !== undefined) {
-					var newCoordinates = L.latLng(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
-
-					// No need to remove and add the layer again (v1.0.0 only)
-					foundMarker.Move(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
-					myCluster.ProcessView();
+					moveFeature(foundMarker, newFeature);
+				} else {
+					addFeature(newFeature);
 				}
+			}
+
+			function addFeature(newFeature) {
+				addFeatureLight(newFeature);
+			}
+
+			function createIcon(data, category) {
+				return customIcon;
+			}
+
+			function moveFeature(foundMarker, newFeature) {
+				foundMarker.Move(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+				myCluster.ProcessView();
+			}
+
+			function addFeatureLight(newFeature) {
+				var newMarker = new PruneCluster.Marker(newFeature.geometry.coordinates[1], newFeature.geometry.coordinates[0]);
+
+				//newMarker.category = newFeature.category;
+				//newMarker.weight = newFeature.weight;
+				//newMarker.filtered = true;
+				//newMarker.data.forceIconRedraw = false;
+				newMarker.data.popup = "Feature: " + newFeature.id + "<br/><img src='assets/indio.gif' width='250px'/>";
+				newMarker.data.icon = createIcon;
+				markers.setItem(newFeature.id, newMarker);
+				myCluster.RegisterMarker(newMarker);
+			}
+
+			function refreshMap() {
+				myCluster.ProcessView();
+			}
+
+			function filter() {
+				for (var key in markers.getItems()) {
+					markers.getItem(key).filtered = (key <= Number(filterId.value));
+				}
+
+				myCluster.ProcessView();
 			}
 
 			var map = L.map('map', {
@@ -73,6 +137,8 @@
 			<button onclick="goHome()">Fly home</button>
 			<button onclick="generateFeatures()">Generate features</button>
 			<button onclick="stopGeneratingFeatures()">Stop Generating features</button>
+			<input id="filterId" type="number" value="200"></input>
+			<button onclick="filter()">Filter</button>
 		</div>
 	</body>
 </html>

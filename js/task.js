@@ -2,16 +2,19 @@ var lat_min = 41.35272;
 var lat_max = 41.45868;
 var lon_min = 2.05547;
 var lon_max = 2.31073;
-var NUMBER_OF_FEATURES = 500;
+var NUMBER_OF_FEATURES;
 var REFRESH_RATE = 100;
 var featuresTimeout;
 
 var markers = [];
 
+initFeatures();
+
 onmessage = function (oEvent) {
-	switch(oEvent.data) {
+	switch(oEvent.data.type) {
 		case "generateFeatures":
-		if(!featuresTimeout) {
+			if(!featuresTimeout) {
+				NUMBER_OF_FEATURES = oEvent.data.size;
 				startGeneratingFeatures();
 			}
 			break;
@@ -24,6 +27,13 @@ onmessage = function (oEvent) {
 	}
 };
 
+function initFeatures() {
+	postMessage({
+		type: "addFeatures",
+		features: []
+	});
+}
+
 function startGeneratingFeatures() {
 	featuresTimeout = setInterval(function() {
 		sendNewFeature();
@@ -32,30 +42,19 @@ function startGeneratingFeatures() {
 
 function sendNewFeature() {
 	var markerId = Math.round(Math.random()*(NUMBER_OF_FEATURES-1));
-	var foundMarker = markers[markerId]; 
-	
-	if(foundMarker === undefined) {
-		var newMarker = generateGeoJSONFeature(markerId);
+	var newMarker = generateGeoJSONFeature(markerId);
 		
-		markers[markerId] = newMarker;
-		postMessage({
-			type: "generatedFeature",
-			feature: newMarker
-		});
-	} else {
-		foundMarker.geometry.coordinates = [generateLon(), generateLat()];
-		
-		postMessage({
-			type: "moveFeature",
-			feature: foundMarker
-		});
-	}
-	
+	postMessage({
+		type: "addOrMoveFeature",
+		feature: newMarker
+	});
 }
 
 function generateGeoJSONFeature(id) {
 	return {
 		"id": id,
+		"category": "CAT" + Math.round(Math.random()*3),
+		"weight": Math.round(Math.random()*5),
 		"type": "Feature",
 		"geometry": {
 			"type": "Point",

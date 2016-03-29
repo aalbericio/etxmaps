@@ -1,6 +1,6 @@
 
-function Pool(){
-    this._items = [];
+function Pool(numberOfFeatures){
+    this._items = new Array(numberOfFeatures);
 }
 
 Pool.prototype.containsItem = function(id){
